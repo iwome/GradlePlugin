@@ -1,0 +1,39 @@
+apply plugin: 'java-library'
+
+def lintVersion = '26.2.0-rc02'
+
+dependencies {
+    // For a description of the below dependencies, see the main project README
+    compileOnly "com.android.tools.lint:lint-api:$lintVersion"
+    compileOnly "com.android.tools.lint:lint-checks:$lintVersion"
+    testCompile "com.android.tools.lint:lint:$lintVersion"
+    testCompile "com.android.tools.lint:lint-tests:$lintVersion"
+    testCompile "com.android.tools:testutils:$lintVersion"
+}
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+jar {
+    manifest {
+        // Only use the "-v2" key here if your checks have been updated to the
+        // new 3.0 APIs (including UAST)
+        attributes("Lint-Registry": "com.bbq.lintrules.checks.SampleIssueRegistry")
+    }
+}
+
+//指定编译的编码
+tasks.withType(JavaCompile){
+    options.encoding = "UTF-8"
+}
+
+// 创建了一个叫“lintJarOutput”的Gradle configuration，
+configurations {
+    lintJarOutput
+}
+
+// 指定定义方法lintJarOutput的作用，此处是获得调用jar方法后的生成的jar包
+dependencies {
+    lintJarOutput files(jar)
+}
+defaultTasks 'assemble'

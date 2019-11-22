@@ -1,0 +1,38 @@
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+def lintVersion = '26.2.0-rc02'
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven {
+        url "https://maven.google.com"
+    }
+    google()
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.tools.build:gradle:3.2.1'
+//    implementation "com.android.tools.lint:lint-api:$lintVersion"
+    //gradle sdk
+    implementation gradleApi()
+    //groovy sdk
+    implementation localGroovy()
+}
+
+//定义依赖uri,发布仓库
+group = "com.bbq.lintPlugin"
+version = "1.0.0"
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri('../repo'))
+        }
+    }
+}
+
+sourceCompatibility = "7"
+targetCompatibility = "7"
